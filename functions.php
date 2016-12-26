@@ -1,5 +1,5 @@
 <?php
-
+// WORKING
 require_once 'src/wp-app/wallace-util.php';
 require_once 'src/wp-app/endpoints.php';
 
@@ -10,7 +10,8 @@ if (!class_exists('Twig_Autoloader')){
 
 $wal_loader = new Twig_Loader_Filesystem(get_template_directory() . '/src/wp-app/templates' );
 $wal_twig = new Twig_Environment($wal_loader, array(
-    'cache' => get_template_directory() . '/src/wp-app/templates/template-cache',
+    // 'cache' => get_template_directory() . '/src/wp-app/templates/template-cache',
+    'cache' => false
 ));
 
 require_once 'php-libs/theme-updates/theme-update-checker.php';
@@ -31,7 +32,7 @@ function wal_init(){
 				'numberposts' => 1,
 				'post_type' => 'post'))[0]['ID'];
 		if (empty($sticky_posts)){
-			stick_post($most_recent_post_id );
+			stick_post( $most_recent_post_id );
 			$featured_post_id = $most_recent_post_id;
 		}
 		else if (count($sticky_posts) >= 1){

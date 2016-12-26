@@ -112,7 +112,7 @@ function wal_modify_post($raw_post, $get_content){
 }
 
 function wal_request_posts($request){
-
+	
 
 	$currentApiPage = $request->get_param('page');
 	$show_featured = $request->get_param('featured');
