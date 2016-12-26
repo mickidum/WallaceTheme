@@ -1,5 +1,5 @@
 import {Component, AnimationTransitionEvent} from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml, Title } from '@angular/platform-browser';
 
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
@@ -42,7 +42,7 @@ export class PostViewComponent {
 	safeTitle: SafeHtml;
 	safeContent: SafeHtml
 
-	constructor(private store: Store<AppState>, private router: Router, private ds: DomSanitizer){}
+	constructor(private store: Store<AppState>, private router: Router, private ds: DomSanitizer, private titleChange: Title){}
 		
 
 	ngOnInit(){
@@ -56,6 +56,10 @@ export class PostViewComponent {
 				this.post = selectedPost;
 				this.safeTitle = this.ds.bypassSecurityTrustHtml(this.post.title);
 				this.safeContent = this.ds.bypassSecurityTrustHtml(this.post.content);
+				
+				// NEW
+				this.titleChange.setTitle(this.post.title);
+				// NEW
 			}
 			else{
 				this.animSub2 = this.store.let(appSelectors.getAnimationData).subscribe(animationData => {
@@ -81,7 +85,8 @@ export class PostViewComponent {
 		else{
 			this.fireAnimation = 'in';
 		 }
-
+		
+		
 		
 	}
 

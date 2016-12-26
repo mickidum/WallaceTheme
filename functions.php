@@ -24,6 +24,13 @@ $wal_update_checker = new ThemeUpdateChecker(
 function wal_init(){
 	
 	add_theme_support( 'post-thumbnails' ); 
+	add_theme_support( 'title-tag' );
+	add_filter( 'document_title_parts', 'filter_function_name_11' );
+function filter_function_name_11( $title ){
+	$title["site"] = '';
+	return $title;
+}
+	
 
 	$featured_post_id = -1;
 	if(wp_count_posts()->publish > 0){

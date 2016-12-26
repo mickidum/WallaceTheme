@@ -1,4 +1,5 @@
 import 'rxjs/add/operator/let';
+import { Title } from '@angular/platform-browser';
 
 import { Component, ViewChild, ElementRef, NgZone, AnimationTransitionEvent, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
@@ -40,7 +41,13 @@ export class HomeViewComponent {
 	subscriptions: Subscription[] = [];
 	fireTransition: string;
 
-	constructor(private store: Store<AppState>, private router: Router, private cd: ChangeDetectorRef){
+	// NEW
+	private pathToIndex: string;
+	// NEW
+	
+
+	constructor(private store: Store<AppState>, private router: Router, private cd: ChangeDetectorRef, private titleChange: Title){
+		
 		this.posts$ = store.let(appSelectors.getPosts);
 		this.logoSrc$ = store.let(appSelectors.getSiteIconSrc);
 		this.siteTitle$ = store.let(appSelectors.getSiteTitle);
@@ -80,6 +87,13 @@ export class HomeViewComponent {
 		else{
 			this.fireTransition = 'in';
 		}
+		this.store.let(appSelectors.getPathToIndex).subscribe(_pathToIndex => {
+			this.pathToIndex = _pathToIndex;
+		});
+
+		this.siteTitle$.subscribe(title => {
+			this.titleChange.setTitle(title);
+		});
 	}
 
 	ngAfterViewInit(){
