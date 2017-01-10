@@ -20,7 +20,24 @@ add_action('rest_api_init', function(){
 
 	));
 
-	
+	register_rest_route( 'wallace/v1','pages', array(
+							'methods'         => 'GET',
+							'callback'        => 'wal_request_pages',
+
+	));
+
+	register_rest_route( 'wallace/v1','pages' . '/(?P<id>[\d]+)', array(
+							'methods'         => 'GET',
+							'callback'        => 'wal_request_page',
+
+	));
+
+	register_rest_route( 'wallace/v1','site-menus', array(
+							'methods'         => 'GET',
+							'callback'        => 'wal_request_site_menus',
+
+	));
+
 });
 
 function wal_request_site_data($request){
@@ -32,6 +49,24 @@ function wal_request_site_data($request){
 	];
 	return $site_data;
 }
+
+// GETTING MENUS
+function wal_request_site_menus($request){
+	$site_menus = [];
+
+	foreach (get_nav_menu_locations() as $slug => $a_id) {
+    
+    if ($a_id) {
+    	$menu = wp_get_nav_menu_object( $a_id );
+			$menu->items = wp_get_nav_menu_items($menu->term_id);
+			$site_menus[$slug] = $menu;
+		}
+	
+  }
+
+	return $site_menus;
+}
+
 
 function wal_get_index(){
 	$index = '';
@@ -61,6 +96,38 @@ function wal_request_post($request){
 
 		$new_response['posts'] = $posts;
 		return $new_response;
+}
+
+// GET STATIC PAGE BY ID
+function wal_request_page($request){
+
+		$id = (int) $request['id'];
+
+		$post_request = new WP_REST_Request('GET', '/wp/v2/pages/' . $id);
+			
+		$response = rest_get_server()->dispatch($post_request);
+		$raw_post= $response->data;
+		$new_response = array();
+		$post = wal_modify_post($raw_post, true);
+
+		$posts[0] = $post;
+
+		$new_response['posts'] = $posts;
+		return $new_response;
+		
+		return $new_response;
+}
+
+function wal_request_pages($request){
+	
+	$post_request = new WP_REST_Request('GET', '/wp/v2/pages');
+	
+	$response = rest_get_server()->dispatch($post_request);
+	$data = $response->data;
+	$new_response = array();
+	$new_response['pages'] = $data;
+	
+	return $new_response;
 }
 
 function wal_modify_post($raw_post, $get_content){

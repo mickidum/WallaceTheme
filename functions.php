@@ -20,17 +20,29 @@ $wal_update_checker = new ThemeUpdateChecker(
     'https://wallacetheme.com/update.json'
 );
 
+function my_function_admin_bar(){
+    return false;
+}
+add_filter( 'show_admin_bar' , 'my_function_admin_bar');
+
 
 function wal_init(){
 	
 	add_theme_support( 'post-thumbnails' ); 
 	add_theme_support( 'title-tag' );
 	add_filter( 'document_title_parts', 'filter_function_name_11' );
-function filter_function_name_11( $title ){
-	$title["site"] = '';
-	return $title;
-}
 	
+	function filter_function_name_11( $title ){
+		$title["site"] = '';
+		return $title;
+	}
+
+// ADD MENU SUPPORT
+	register_nav_menus( array(
+		'primary' => __( 'Primary Menu', 'WallaceTheme' ),
+		'sidebar'  => __( 'Sidebar Menu', 'WallaceTheme' ),
+		'footer'  => __( 'Footer Menu', 'WallaceTheme' ),
+	) );
 
 	$featured_post_id = -1;
 	if(wp_count_posts()->publish > 0){
@@ -103,7 +115,7 @@ add_action( 'wp_enqueue_scripts', 'wal_add_scripts_and_styles' );
 
 
 function wal_shorten_excerpt() {
-	return 22;
+	return 32;
 }
 add_filter( 'excerpt_length', 'wal_shorten_excerpt', 999 );
 

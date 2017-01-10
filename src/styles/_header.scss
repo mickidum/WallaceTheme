@@ -1,5 +1,20 @@
 		$header-bg: #040430;
 
+.menu-yo {
+	display: flex;
+	li {
+		margin-left: 15px;
+	}
+	a {
+		color: #fff;
+		font-size: ms(1);
+		display: block;
+		font-family: 'Open Sans', sans-serif;
+		font-weight: 300;
+		text-transform: uppercase;
+	}
+}
+
 #home-header{
 //	margin-top: ms(1);
 		background: $header-bg;
@@ -9,7 +24,7 @@
 		z-index: 3;
 		transition: opacity 0.5s;
 		
-	img{
+	img{ 
 		width: ms(3);
 		padding: ms(1);
 		padding-right: 0;
@@ -66,13 +81,13 @@
 }
 
 nav{
-	width: ms(6);
+	// width: ms(6);
 	max-width: 100%;
 	position: absolute;
-	right: 0;
+	right: ms(1);
 	background-color: lighten($header-bg, 5%);
 	background-color: $header-bg;
-	transform: translateY(-100%);
+	// transform: translateY(-100%);
 	z-index: 2;
 	transition: transform 0.5s;
 	.page-item{

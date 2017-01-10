@@ -1,6 +1,6 @@
 
 <?php
-	$wal_app_state = Wallace::get_initial_state('post', get_the_ID());
+	$wal_app_state = Wallace::get_initial_state('page', get_the_ID());
 	get_header();
 ?>
 
@@ -8,9 +8,11 @@
     	<wallace>
 
 			<?php 
-				echo $wal_twig->render('post.html', array(
-				'post' => $wal_app_state['posts'][0], 
-				'siteData' => $wal_app_state['site_data']));
+				echo $wal_twig->render('page.html', array(
+				'post' => $wal_app_state['pages'][0],
+				'siteData' => $wal_app_state['site_data'],
+				'siteMenus' => $wal_app_state['site_menus']
+				)); 
 			?>
     	</wallace>
 

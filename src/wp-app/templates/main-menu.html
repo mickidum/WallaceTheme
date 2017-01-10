@@ -1,0 +1,7 @@
+<nav>
+	<ul class="menu-yo">
+	{% for item in siteMenus.primary.items %}
+		<li><a href="{{item.url}}">{{item.title}}</a></li>
+	{% endfor %}
+	</ul>
+</nav>
