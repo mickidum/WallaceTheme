@@ -38,6 +38,12 @@ add_action('rest_api_init', function(){
 
 	));
 
+	register_rest_route( 'wallace/v1','category' . '/(?P<id>[\d]+)', array(
+							'methods'         => 'GET',
+							'callback'        => 'wal_request_posts_by_category',
+
+	));
+
 });
 
 function wal_request_site_data($request){
@@ -221,8 +227,51 @@ function wal_request_posts($request){
 
 
 
+// POSTS BY CATEGORY
+function wal_request_posts_by_category($request){
+
+	$id = (int) $request->get_param('id');
+
+	$currentApiPage = $request->get_param('page');
+
+	$post_request = new WP_REST_Request('GET', '/wp/v2/posts');
+	$post_request->set_query_params($request->get_query_params() );
+	$post_request->set_param("per_page", 8);
+	$post_request->set_param("categories", $id);
+	
+	$response = rest_get_server()->dispatch($post_request);
+	$data = $response->data;
+	$new_response = array();
+	$posts = array();
 	
 
+	if($show_featured == 'true'){
 
+		$featured_post = Wallace::get_featured_post();
+		if($featured_post !== null){
+			array_push($posts, $featured_post);
+		}
+
+	}
+	foreach ($data as $raw_post){
+		if($raw_post['id'] !== Wallace::get_featured_post_id()){
+			$post = wal_modify_post($raw_post, false);
+			array_push($posts, $post);
+		}
+	}
+
+	$new_response['posts'] = $posts;
+	if($currentApiPage !== null){
+		$new_response['api_page'] = $currentApiPage;
+	}
+	else{
+		$new_response['api_page'] = 1;
+	}
+	$new_response['total_api_pages'] = $response->get_headers()['X-WP-TotalPages'];
+	return $new_response;
+
+}
+
+	
 
 ?>

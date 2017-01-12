@@ -1,0 +1,11 @@
+<header id='home-header'> 
+    <a href="{{siteData.pathToIndex}}"><img src="{{siteData.iconUrl}}"/></a>
+    <h1 id="site-title">{{siteData.title}}</h1>
+    <button id="page-menu-button" style='display: none'>Menu</button>
+    {% if siteMenus.primary %}
+    	{{ include('main-menu.html') }}
+    {% endif %}
+</header>
+
+{{ include('post-list.html') }}
+
